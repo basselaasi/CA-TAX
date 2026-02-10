@@ -1,0 +1,53 @@
+{
+  "version": "1.0.0",
+  "rules": [
+    {
+      "id": "employment",
+      "condition": "hasEmploymentIncome",
+      "section": "employment",
+      "checklist": ["T4 slips (Box 14 employment income, Box 22 tax deducted)."]
+    },
+    {
+      "id": "investments",
+      "condition": "hasInvestmentIncome",
+      "section": "investments",
+      "checklist": ["T5/T3 slips or annual investment summaries."]
+    },
+    {
+      "id": "rrsp",
+      "condition": "hasRrsp",
+      "section": "rrsp",
+      "checklist": ["RRSP contribution receipts for Mar-Dec and Jan-Feb windows."]
+    },
+    {
+      "id": "student",
+      "condition": "isStudent",
+      "section": "tuition",
+      "checklist": ["T2202 tuition slip and transfer documentation if applicable."]
+    },
+    {
+      "id": "medical",
+      "condition": "hasMedicalExpenses",
+      "section": "medical",
+      "checklist": ["Medical receipts and insurance reimbursement statements."]
+    },
+    {
+      "id": "rent",
+      "condition": "hasRentOrPropertyTax",
+      "section": "housing",
+      "checklist": ["Rent receipts or property tax statements for the tax year."]
+    },
+    {
+      "id": "selfEmployment",
+      "condition": "hasSelfEmployment",
+      "section": "self-employment",
+      "checklist": ["Business income records and categorized expense receipts."]
+    },
+    {
+      "id": "donations",
+      "condition": "hasDonations",
+      "section": "donations",
+      "checklist": ["Official donation receipts with charity registration number."]
+    }
+  ]
+}

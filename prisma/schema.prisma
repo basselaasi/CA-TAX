@@ -1,0 +1,125 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         String          @id @default(cuid())
+  email      String          @unique
+  name       String?
+  createdAt  DateTime        @default(now())
+  updatedAt  DateTime        @updatedAt
+  taxReturns TaxYearReturn[]
+}
+
+model TaxYearReturn {
+  id                String             @id @default(cuid())
+  userId            String?
+  user              User?              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  taxYear           Int
+  province          String             @default("ON")
+  consentAcceptedAt DateTime
+  encryptedPayload  String
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  profile           Profile?
+  incomeSlips       IncomeSlip[]
+  rrspEntries       RRSP[]
+  tuitionEntries    Tuition[]
+  medicalExpenses   MedicalExpense[]
+  rentHousing       RentHousing[]
+  donations         Donation[]
+  selfEmployment    SelfEmployment?
+  documents         Document[]
+
+  @@index([userId])
+  @@unique([userId, taxYear])
+}
+
+model Profile {
+  id                 String        @id @default(cuid())
+  taxYearReturnId    String        @unique
+  taxYearReturn      TaxYearReturn @relation(fields: [taxYearReturnId], references: [id], onDelete: Cascade)
+  birthYear          Int?
+  maritalStatus      String
+  maritalStatusDate  String?
+  hasDependants      Boolean
+  dependantsCount    Int?
+  isStudent          Boolean
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+}
+
+model IncomeSlip {
+  id              String        @id @default(cuid())
+  taxYearReturnId String
+  taxYearReturn   TaxYearReturn @relation(fields: [taxYearReturnId], references: [id], onDelete: Cascade)
+  slipType        String
+  issuerName      String
+  box14           Float?
+  amount          Float
+  notes           String?
+}
+
+model RRSP {
+  id              String        @id @default(cuid())
+  taxYearReturnId String
+  taxYearReturn   TaxYearReturn @relation(fields: [taxYearReturnId], references: [id], onDelete: Cascade)
+  institution     String?
+  amount          Float
+}
+
+model Tuition {
+  id              String        @id @default(cuid())
+  taxYearReturnId String
+  taxYearReturn   TaxYearReturn @relation(fields: [taxYearReturnId], references: [id], onDelete: Cascade)
+  schoolName      String?
+  amount          Float
+}
+
+model MedicalExpense {
+  id              String        @id @default(cuid())
+  taxYearReturnId String
+  taxYearReturn   TaxYearReturn @relation(fields: [taxYearReturnId], references: [id], onDelete: Cascade)
+  provider        String?
+  amount          Float
+}
+
+model RentHousing {
+  id              String        @id @default(cuid())
+  taxYearReturnId String
+  taxYearReturn   TaxYearReturn @relation(fields: [taxYearReturnId], references: [id], onDelete: Cascade)
+  type            String
+  amount          Float
+  addressNote     String?
+}
+
+model Donation {
+  id              String        @id @default(cuid())
+  taxYearReturnId String
+  taxYearReturn   TaxYearReturn @relation(fields: [taxYearReturnId], references: [id], onDelete: Cascade)
+  charityName     String?
+  amount          Float
+}
+
+model SelfEmployment {
+  id              String        @id @default(cuid())
+  taxYearReturnId String        @unique
+  taxYearReturn   TaxYearReturn @relation(fields: [taxYearReturnId], references: [id], onDelete: Cascade)
+  businessName    String
+  income          Float
+  expensesJson    String
+}
+
+model Document {
+  id              String        @id @default(cuid())
+  taxYearReturnId String
+  taxYearReturn   TaxYearReturn @relation(fields: [taxYearReturnId], references: [id], onDelete: Cascade)
+  label           String
+  documentType    String
+  uploadedAt      DateTime      @default(now())
+}
